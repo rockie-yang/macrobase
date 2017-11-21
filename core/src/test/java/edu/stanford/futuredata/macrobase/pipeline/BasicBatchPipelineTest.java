@@ -16,4 +16,15 @@ public class BasicBatchPipelineTest {
         assertEquals(3.0, e.numTotal(), 1e-10);
     }
 
+    @Test
+    public void testPredicateClassifier() throws Exception {
+        PipelineConfig conf = PipelineConfig.fromYamlFile(
+                "src/test/resources/tiny_predicate.yaml"
+        );
+        BasicBatchPipeline p = new BasicBatchPipeline(conf);
+        Explanation e = p.results();
+        final double numInliers = e.numTotal() - e.numOutliers();
+        assertEquals(2, numInliers, 1e-10);
+    }
+
 }
