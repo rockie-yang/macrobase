@@ -1,0 +1,19 @@
+pipeline: "BasicBatchPipeline"
+
+inputURI: "csv://core/demo/sample_cubed.csv"
+
+classifier: "predicate"
+countColumn: "count"
+meanColumn: "mean"
+stdColumn: "std"
+
+metric: "mean"
+predicate: "<="
+value: 34.0
+
+summarizer: "apriori"
+attributes:
+  - "location"
+  - "version"
+minRatioMetric: 10.0
+minSupport: 0.2

@@ -1,9 +1,6 @@
 package edu.stanford.futuredata.macrobase.pipeline;
 
-import edu.stanford.futuredata.macrobase.analysis.classify.ArithmeticClassifier;
-import edu.stanford.futuredata.macrobase.analysis.classify.CubeClassifier;
-import edu.stanford.futuredata.macrobase.analysis.classify.QuantileClassifier;
-import edu.stanford.futuredata.macrobase.analysis.classify.RawClassifier;
+import edu.stanford.futuredata.macrobase.analysis.classify.*;
 import edu.stanford.futuredata.macrobase.analysis.summary.Explanation;
 import edu.stanford.futuredata.macrobase.analysis.summary.apriori.APExplanation;
 import edu.stanford.futuredata.macrobase.analysis.summary.apriori.APrioriSummarizer;
@@ -25,6 +22,8 @@ import java.util.Map;
  */
 public class CubePipeline implements Pipeline {
     Logger log = LoggerFactory.getLogger("CubePipeline");
+
+    private final PipelineConfig conf;
 
     // Ingest
     private String inputURI;
@@ -48,6 +47,8 @@ public class CubePipeline implements Pipeline {
     private boolean debugDump;
 
     public CubePipeline(PipelineConfig conf) {
+        this.conf = conf;
+
         inputURI = conf.get("inputURI");
         restHeader = conf.get("restHeader", null);
         jsonBody = conf.get("jsonBody", null);
@@ -156,6 +157,14 @@ public class CubePipeline implements Pipeline {
                 classifier.setIncludeHigh(includeHi);
                 classifier.setIncludeLow(includeLo);
                 return classifier;
+            }
+            case "predicate": {
+                // default values for PredicateClassifier:
+                // {predicate: "==", value: 1.0}
+                final String metric = conf.get("metric");
+                final String predicateStr = conf.get("predicate", "==").trim();
+                final double metricValue = conf.get("value", 1.0);
+                return new PredicateCubeClassifier(countColumn, metric, predicateStr, metricValue);
             }
             case "raw": {
                 return new RawClassifier(

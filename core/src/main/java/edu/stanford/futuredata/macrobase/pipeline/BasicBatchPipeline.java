@@ -41,15 +41,8 @@ public class BasicBatchPipeline implements Pipeline {
         this.conf = conf;
         inputURI = conf.get("inputURI");
 
-        //classifierType = conf.get("classifier", "percentile");
         metric = conf.get("metric");
-        //cutoff = conf.get("cutoff", 1.0);
-        //pctileHigh = conf.get("includeHi", true);
-        //pctileLow = conf.get("includeLo", true);
-
-        //summarizerType = conf.get("summarizer", "apriori");
         attributes = conf.get("attributes");
-        //ratioMetric = conf.get("ratioMetric", "globalRatio");
         minRiskRatio = conf.get("minRatioMetric", 3.0);
         minSupport = conf.get("minSupport", 0.01);
     }
